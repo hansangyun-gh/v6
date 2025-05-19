@@ -11,6 +11,10 @@ const router = Router();
 /**
  * GET /api/prompts - 모든 프롬프트 목록
  */
+router.get('/', (req, res, next) => {
+  console.log('[진단] /api/prompts GET 진입');
+  next();
+});
 router.get('/', asyncHandler(promptController.getAllPrompts));
 
 /**

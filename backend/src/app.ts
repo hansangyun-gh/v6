@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.json());
 app.use('/api', evaluationRoutes);
 app.use('/api/prompts', promptRoutes);
+console.log('[진단] /api/prompts 라우트 등록됨');
 
 /**
  * Swagger 설정 (운영환경에서는 비활성화)
