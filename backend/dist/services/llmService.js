@@ -22,7 +22,7 @@ async function evaluateWithLLM(file, prompt, model) {
         const cheapModel = 'claude-3-haiku-20240307'; // 가장 저렴한 모델
         const response = await axios_1.default.post('https://api.anthropic.com/v1/messages', {
             model: cheapModel,
-            max_tokens: 1024,
+            max_tokens: 4096, // 더 긴 피드백 응답을 위해 토큰 수 상향
             messages: [
                 { role: 'user', content: prompt }
             ]

@@ -15,32 +15,42 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const PORT = Number(process.env.PORT) || 5000;
+// CORS 설정: 개발은 전체 허용, 운영은 도메인 제한
+if (process.env.NODE_ENV === 'production') {
+    app.use((0, cors_1.default)({ origin: 'https://your-frontend-domain.com', credentials: true })); // 실제 도메인으로 변경
+}
+else {
+    app.use((0, cors_1.default)({ origin: true, credentials: true }));
+}
 app.use(express_1.default.json());
 app.use('/api', evaluationRoutes_1.default);
 app.use('/api/prompts', promptRoutes_1.default);
 /**
- * Swagger 설정
+ * Swagger 설정 (운영환경에서는 비활성화)
  */
-const swaggerOptions = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'LLM 평가 API',
-            version: '1.0.0',
-            description: 'LLM 기반 보고서 정량 평가 백엔드 API 문서',
-        },
-        servers: [
-            {
-                url: 'http://localhost:' + PORT,
+if (process.env.NODE_ENV !== 'production') {
+    const swaggerOptions = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'LLM 평가 API',
+                version: '1.0.0',
+                description: 'LLM 기반 보고서 정량 평가 백엔드 API 문서',
             },
-        ],
-    },
-    apis: ['./src/routes/*.ts', './src/controllers/*.ts'], // JSDoc 주석 위치
-};
-const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
+            servers: [
+                {
+                    url: 'http://localhost:' + PORT,
+                },
+            ],
+        },
+        apis: ['./src/routes/*.ts', './src/controllers/*.ts'], // JSDoc 주석 위치
+    };
+    const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
+    app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
+}
 /**
  * 헬스 체크 라우트
  */
@@ -61,6 +71,9 @@ const uploadDir = path_1.default.join(__dirname, '../uploads');
 if (!fs_1.default.existsSync(uploadDir)) {
     fs_1.default.mkdirSync(uploadDir, { recursive: true });
 }
+// prompts.json 존재 여부 진단 로그
+const promptJsonPath = path_1.default.join(__dirname, 'data/prompts.json');
+console.log('[진단] dist/data/prompts.json exists:', fs_1.default.existsSync(promptJsonPath));
 if (process.env.NODE_ENV !== 'test') {
     app.listen(PORT, () => {
         console.log(`서버 실행 중: http://localhost:${PORT}`);
