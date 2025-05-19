@@ -11,6 +11,8 @@ const API_BASE = process.env.VITE_API_BASE_URL
     ? `${process.env.REACT_APP_API_BASE_URL}/api/prompts`
     : '/api/prompts';
 console.log('API_BASE:', API_BASE);
+console.log('VITE_API_BASE_URL:', process.env.VITE_API_BASE_URL);
+console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
 
 /**
  * 모든 프롬프트 목록 조회
