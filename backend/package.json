@@ -8,7 +8,8 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "build": "tsc",
+    "build": "tsc && npm run copy-data",
+    "copy-data": "mkdir -p dist/data && cp data/prompts.json dist/data/prompts.json",
     "start": "node dist/app.js"
   },
   "keywords": [],
