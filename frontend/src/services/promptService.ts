@@ -5,9 +5,12 @@
 import axios from 'axios';
 import { Prompt } from '../types/interfaces';
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL
-  ? `${process.env.REACT_APP_API_BASE_URL}/api/prompts`
-  : '/api/prompts';
+const API_BASE = process.env.VITE_API_BASE_URL
+  ? `${process.env.VITE_API_BASE_URL}/api/prompts`
+  : process.env.REACT_APP_API_BASE_URL
+    ? `${process.env.REACT_APP_API_BASE_URL}/api/prompts`
+    : '/api/prompts';
+console.log('API_BASE:', API_BASE);
 
 /**
  * 모든 프롬프트 목록 조회
