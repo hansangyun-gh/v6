@@ -73,6 +73,10 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// prompts.json 존재 여부 진단 로그
+const promptJsonPath = path.join(__dirname, 'data/prompts.json');
+console.log('[진단] dist/data/prompts.json exists:', fs.existsSync(promptJsonPath));
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`서버 실행 중: http://localhost:${PORT}`);
