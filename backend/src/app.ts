@@ -55,6 +55,7 @@ if (process.env.NODE_ENV !== 'production') {
  * 헬스 체크 라우트
  */
 app.get('/health', (req: Request, res: Response) => {
+  console.log('[진단] /health 진입');
   res.status(200).json({ status: 'ok' });
 });
 
